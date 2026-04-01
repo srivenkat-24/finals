@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All The BEST</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --paper: #fffdf7;
+      --ink: #1a1a1a;
+      --red: #c0392b;
+      --blue: #1a3c6b;
+      --muted: #888;
+      --border: #ccc;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,0.04) 27px, rgba(0,0,0,0.04) 28px);
+    }
+
+    .hospital-header {
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      margin-bottom: 32px;
+      border-bottom: 3px double var(--ink);
+      padding-bottom: 20px;
+      position: relative;
+    }
+    .hospital-header .logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .hospital-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(20px, 5vw, 28px);
+      color: var(--blue);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .hospital-header .tagline {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+    .red-cross {
+      position: absolute;
+      right: 0; top: 0;
+      font-size: 36px;
+      color: var(--red);
+      opacity: 0.12;
+    }
+
+    .form-card {
+      width: 100%;
+      max-width: 500px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      box-shadow: 4px 4px 0 rgba(0,0,0,0.06), 8px 8px 0 rgba(0,0,0,0.03);
+      padding: 40px 48px;
+    }
+
+    .field-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .field-input {
+      width: 100%;
+      border: none;
+      border-bottom: 1.5px solid var(--ink);
+      background: transparent;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 22px;
+      color: var(--ink);
+      padding: 6px 0;
+      outline: none;
+      letter-spacing: 1px;
+    }
+    .field-input::placeholder {
+      color: var(--border);
+      font-style: italic;
+      font-size: 16px;
+    }
+    .field-input:focus {
+      border-color: var(--blue);
+    }
+
+    #popup {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(3px);
+    }
+    #popup.show {
+      display: flex;
+      animation: fadeIn 0.35s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .popup-card {
+      background: var(--paper);
+      max-width: 420px;
+      width: 100%;
+      padding: 44px 48px;
+      border-top: 5px solid var(--red);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+      animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .popup-eyebrow {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .popup-main {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(16px, 4vw, 21px);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    .popup-sub {
+      margin-top: 24px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .confetti-particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 200;
+      animation: fall linear forwards;
+      border-radius: 1px;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .form-card, .popup-card { padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hospital-header">
+    <div class="logo">City General &nbsp;·&nbsp; Est. 2025</div>
+    <h1>Department of<br>Final MBBS Examinations</h1>
+    <div class="tagline">Verification System v4.2</div>
+    <div class="red-cross">✚</div>
+  </div>
+
+  <div class="form-card">
+    <label class="field-label" for="name-input">Your Name</label>
+    <input
+      type="text"
+      id="name-input"
+      class="field-input"
+      placeholder="Type your name…"
+      autocomplete="off"
+      autofocus
+    />
+  </div>
+
+  <div id="popup">
+    <div class="popup-card">
+      <div class="popup-eyebrow">⚠ Identity confirmed</div>
+      <div class="popup-main">
+        That's enough.<br><br>
+        Goddess Sarvani,<br>
+        ALLLL THEEE BESTTTTT.<br>
+        YOU WILL BE A GREAT DOCTOR.
+      </div>
+      <div class="popup-sub">🩺 &nbsp; tap anywhere to dismiss</div>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('name-input');
+    const popup  = document.getElementById('popup');
+    let triggered = false;
+
+    input.addEventListener('input', () => {
+      if (triggered) return;
+      if (input.value.trim().toLowerCase().startsWith('sar')) {
+        triggered = true;
+        input.blur();
+        setTimeout(() => {
+          popup.classList.add('show');
+          confetti();
+        }, 150);
+      }
+    });
+
+    popup.addEventListener('click', () => {
+      popup.classList.remove('show');
+      triggered = false;
+      input.value = '';
+      setTimeout(() => input.focus(), 200);
+    });
+
+    function confetti() {
+      const colors = ['#c0392b','#1a3c6b','#c49a2a','#2e7d32','#8e44ad'];
+      for (let i = 0; i < 70; i++) {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.className = 'confetti-particle';
+          const size = 5 + Math.random() * 7;
+          el.style.cssText = `
+            left:${Math.random()*100}vw; top:-10px;
+            width:${size}px; height:${size}px;
+            background:${colors[Math.floor(Math.random()*colors.length)]};
+            animation-duration:${2+Math.random()*2}s;
+            animation-delay:${Math.random()*0.6}s;
+          `;
+          document.body.appendChild(el);
+          el.addEventListener('animationend', () => el.remove());
+        }, i * 20);
+      }
+    }
+  </script>
+</body>
+</html>
